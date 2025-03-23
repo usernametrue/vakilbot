@@ -1,0 +1,21 @@
+{
+  "name": "tsul-feedback-bot",
+  "version": "1.0.0",
+  "description": "Telegram бот для анонимной обратной связи студентов",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "node-telegram-bot-api": "^0.64.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
+}
