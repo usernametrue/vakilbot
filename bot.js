@@ -18,8 +18,19 @@ const chats = {
 };
 
 const userState = {};
-const statsFile = 'stats.json';
+const statsFile = 'data/stats.json';
 const MIN_PART_LENGTH = 30; // Минимальная длина каждой части обращения
+
+const ensureDataDirectoryExists = () => {
+    if (!fs.existsSync('data')) {
+        try {
+            fs.mkdirSync('data', { recursive: true });
+            console.log('Created data directory');
+        } catch (error) {
+            console.error(`Error creating data directory: ${error.message}`);
+        }
+    }
+};
 
 const loadStats = () => {
     if (fs.existsSync(statsFile)) {
@@ -32,6 +43,7 @@ const saveStats = (stats) => {
     fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
 };
 
+ensureDataDirectoryExists();
 const stats = loadStats();
 
 // Расширенное логирование с информацией о пользователе
@@ -45,7 +57,7 @@ const logMessage = (msg, telegramUser = null) => {
     }
     
     const logEntry = `${new Date().toISOString()} - ${userInfo}${msg}\n`;
-    fs.appendFileSync('bot.log', logEntry);
+    fs.appendFileSync('data/bot.log', logEntry);
 };
 
 // Обработка команды /start
@@ -82,20 +94,20 @@ bot.onText(/\/logs/, async (msg) => {
     if (chatId.toString() === adminChatId) {
         try {
             // Проверка наличия файла логов
-            if (!fs.existsSync('bot.log')) {
+            if (!fs.existsSync('data/bot.log')) {
                 bot.sendMessage(chatId, '📂 Файл логов еще не создан.');
                 return;
             }
             
             // Получение размера файла
-            const stats = fs.statSync('bot.log');
+            const stats = fs.statSync('data/bot.log');
             const fileSizeInMB = stats.size / (1024 * 1024);
             
             // Информирование о начале отправки
             bot.sendMessage(chatId, `📤 Отправка файла логов (${fileSizeInMB.toFixed(2)} МБ)...`);
             
             // Отправка файла
-            await bot.sendDocument(chatId, 'bot.log', {
+            await bot.sendDocument(chatId, 'data/bot.log', {
                 caption: `📋 Файл логов бота от ${new Date().toLocaleString()}`
             });
             
@@ -333,3 +345,5 @@ bot.on('message', (msg) => {
         });
     }
 });
+
+console.log("✅ Bot started successfully")
