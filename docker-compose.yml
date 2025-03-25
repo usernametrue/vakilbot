@@ -10,8 +10,6 @@ services:
     volumes:
       - ./bot.js:/app/bot.js
       - ./data:/app/data
-      - ./stats.json:/app/stats.json
-      - ./bot.log:/app/bot.log
     env_file:
       - .env
     environment:
