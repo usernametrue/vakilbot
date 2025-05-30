@@ -15,3 +15,11 @@ services:
     environment:
       - NODE_ENV=production
       - TZ=Asia/Tashkent
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '50M'
+        reservations:
+          memory: '20M'
